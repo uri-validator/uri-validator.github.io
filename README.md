@@ -1,7 +1,12 @@
 ## URI Validator & Redirector
 
-Because I'm surprised one doesn't already exist!
+Because I'm surprised one doesn't already exist
 
-Free to use: [uri-validator.github.io](https://uri-validator.github.io/)
+## Features
+* [Simple website](https://uri-validator.github.io/)
+* No ads, no tracking
+* Loads instantly
 
-Report any [issues](https://github.com/uri-validator/uri-validator.github.io/issues)
+(Crazy what you can do by not adding 5 frameworks)
+
+Report any issues [here](https://github.com/uri-validator/uri-validator.github.io/issues)
