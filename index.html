@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Scheme Redirect Test Page - Test Your URI Schemes</title>
+    <meta name="description"
+        content="Test and analyze your redirect_uri with our URL Scheme Redirect Test Page. Easily break down URI components and redirect with a click.">
+    <style>
+        /* Base styles */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #uri-input {
+            width: 80%;
+            max-width: 800px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 2px solid #888;
+            /* Default border color */
+            box-shadow: 0px 0px 2px 0px;
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        #uri-input:focus {
+            box-shadow: 0px 0px 4px 0px;
+        }
+
+        #redirect-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 2px solid #888;
+            /* Default border color */
+            box-shadow: 0px 0px 2px 0px;
+            transition: box-shadow 0.3s, border-color 0.3s, background-color 0.3s;
+        }
+
+        #redirect-button:focus,
+        #redirect-button:hover {
+            box-shadow: 0px 0px 4px 0px;
+        }
+
+        #breakdown {
+            padding: 15px;
+            margin-top: 20px;
+            display: inline-block;
+            text-align: left;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 5px;
+            border: 2px solid #888;
+            /* Default border color */
+            box-shadow: 0px 0px 2px 0px;
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        /* Light mode with Champagne and Old Lace accents */
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: #FAECC6;
+                /* Champagne */
+                color: #333;
+            }
+
+            #uri-input,
+            #redirect-button,
+            #breakdown {
+                background-color: #FDF7E7;
+                /* Old Lace */
+                border-color: #FAECC6;
+                /* Default border color for light mode */
+                color: #333;
+            }
+
+            #uri-input:focus,
+            #redirect-button:focus,
+            #redirect-button:hover {
+                border-color: #C9A87C;
+                /* Darker border for focus/hover in light mode */
+            }
+
+            #redirect-button {
+                background-color: #FAECC6;
+                /* Champagne */
+                color: #333;
+            }
+        }
+
+        /* Dark mode with Cape Cod and Nile Blue accents */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #424548;
+                /* Cape Cod */
+                color: #ddd;
+            }
+
+            #uri-input,
+            #redirect-button,
+            #breakdown {
+                background-color: #1C3854;
+                /* Nile Blue */
+                border-color: #424548;
+                /* Default border color for dark mode */
+                color: #ddd;
+            }
+
+            #uri-input:focus,
+            #redirect-button:focus,
+            #redirect-button:hover {
+                border-color: #2E5061;
+                /* Darker border for focus/hover in dark mode */
+            }
+
+            #redirect-button {
+                background-color: #424548;
+                /* Cape Cod */
+                color: #ddd;
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const uriInput = document.getElementById('uri-input');
+            const redirectButton = document.getElementById('redirect-button');
+            const breakdownDisplay = document.getElementById('breakdown');
+
+
+            // Load saved URI
+            uriInput.value = localStorage.getItem('lastURI') || '';
+
+            function getURIScheme(uri) {
+                // Regular expression for matching the scheme as per RFC 3986
+                const schemeRegex = /^[a-zA-Z][a-zA-Z\d+\-.]*:/;
+
+                // Extract the scheme using the regular expression
+                const match = uri.match(schemeRegex);
+
+                return match ? match[0].slice(0, -1) : "";
+            }
+
+            function getURIAuthority(uri) {
+                // A regular expression to match the authority part of the URI
+                const regex = /^(?:[^:/?#]+):\/\/([^/?#]*)/;
+
+                const match = uri.match(regex);
+                if (match && match[1]) {
+                    return match[1]; // Return the authority part
+                } else {
+                    return ""; 
+                }
+            }
+
+            function getURIHost(uri) {
+                try {
+                    const url = new URL(uri);
+                    return url.host || "";
+                } catch (error) {
+                    return "";
+                }
+            }
+
+            function getURIPort(uri) {
+                try {
+                    const url = new URL(uri);
+                    return url.port || "";
+                } catch (error) {
+                    return "";
+                }
+            }
+
+            function getURIPath(uri) {
+                try {
+                    const url = new URL(uri);
+                    return url.pathname || "";
+                } catch (error) {
+                    return "";
+                }
+            }
+
+            function getURIQuery(uri) {
+                // Use a regular expression to extract the query component
+                const queryRegex = /\?([^#]+)/;
+                const match = uri.match(queryRegex);
+
+                // Check if a query component was found
+                if (match && match[1]) {
+                    return match[1];
+                } else {
+                    return "";
+                }
+            }
+
+            function getURIFragment(uri) {
+                const hashIndex = uri.indexOf('#');
+                if (hashIndex === -1) {
+                    return "";
+                }
+                return uri.substring(hashIndex + 1);
+            }
+
+            function updateBreakdown(uri) {
+                try {
+                    breakdownDisplay.innerHTML = `
+        <strong>Scheme (Protocol):</strong> ${getURIScheme(uri)}<br>
+        <strong>Authority:</strong> ${getURIAuthority(uri)}<br>
+        <strong>Host:</strong> ${getURIHost(uri)}<br>
+        <strong>Port:</strong> ${getURIPort(uri)}<br>
+        <strong>Path:</strong> ${getURIPath(uri)}<br>
+        <strong>Query:</strong> ${getURIQuery(uri)}<br>
+        <strong>Fragment:</strong> ${getURIFragment(uri)}
+    `;
+                } catch (error) {
+                    breakdownDisplay.textContent = `Invalid URI`;
+                }
+            }
+
+            uriInput.addEventListener('input', (e) => {
+                updateBreakdown(e.target.value);
+            });
+
+            redirectButton.addEventListener('click', () => {
+                localStorage.setItem('lastURI', uriInput.value);
+                window.location.href = uriInput.value;
+            });
+
+            updateBreakdown(uriInput.value);
+        });
+    </script>
+</head>
+
+<body>
+    <h1>URI Scheme Redirect Test</h1>
+    <input type="text" id="uri-input" placeholder="Enter URI Scheme">
+    <div>
+        <button id="redirect-button">Redirect Me!</button>
+    </div>
+    <div id="breakdown"></div>
+    <div><a href="https://www.rfc-editor.org/rfc/rfc3986#section-3">https://www.rfc-editor.org/rfc/rfc3986</a></div>
+</body>
+
+</html>
