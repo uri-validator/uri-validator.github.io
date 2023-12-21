@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Scheme Redirect Test Page - Test Your URI Schemes</title>
+    <title>URI Validator Page - Test URI Redirect</title>
     <meta name="description"
         content="Test and analyze your redirect_uri with our URL Scheme Redirect Test Page. Easily break down URI components and redirect with a click.">
     <style>
@@ -62,6 +62,17 @@
             /* Default border color */
             box-shadow: 0px 0px 2px 0px;
             transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        #source-button {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin: 10px;
+        }
+
+        #rfc {
+            margin: 8px;
         }
 
         /* Light mode with Champagne and Old Lace accents */
@@ -156,7 +167,7 @@
                 if (match && match[1]) {
                     return match[1]; // Return the authority part
                 } else {
-                    return ""; 
+                    return "";
                 }
             }
 
@@ -245,7 +256,11 @@
         <button id="redirect-button">Redirect Me!</button>
     </div>
     <div id="breakdown"></div>
-    <div><a href="https://www.rfc-editor.org/rfc/rfc3986#section-3">https://www.rfc-editor.org/rfc/rfc3986</a></div>
+    <div id="rfc"><a href="https://www.rfc-editor.org/rfc/rfc3986#section-3">https://www.rfc-editor.org/rfc/rfc3986</a>
+    </div>
+    <div id="source-button">
+        <a href="https://github.com/uri-validator/uri-validator.github.io" target="_blank">Source</a>
+    </div>
 </body>
 
 </html>
